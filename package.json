@@ -1,6 +1,6 @@
 {
   "name": "law-reading-tracker",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Desktop app for tracking law school reading assignments, backed by a plain CSV file.",
   "main": "src/main.js",
   "author": "vaingloriousnitwit",

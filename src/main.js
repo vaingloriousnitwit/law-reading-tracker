@@ -13,6 +13,8 @@ const DATA_DIR = app.isPackaged
   ? path.join(app.getPath("documents"), "Law Reading Tracker")
   : path.join(__dirname, "..", "data");
 const CSV_PATH = path.join(DATA_DIR, "readings.csv");
+const SETTINGS_PATH = path.join(DATA_DIR, "settings.json");
+const DEFAULT_SETTINGS = { theme: "system", fontFamily: "sans", fontSize: "medium" };
 const HEADER = [
   "Id",
   "Class",
@@ -43,6 +45,21 @@ function ensureCSVExists() {
   if (!fs.existsSync(CSV_PATH)) {
     fs.writeFileSync(CSV_PATH, stringifyCSV([HEADER]), "utf8");
   }
+}
+
+function loadSettings() {
+  if (!fs.existsSync(SETTINGS_PATH)) return { ...DEFAULT_SETTINGS };
+  try {
+    const parsed = JSON.parse(fs.readFileSync(SETTINGS_PATH, "utf8"));
+    return { ...DEFAULT_SETTINGS, ...parsed };
+  } catch {
+    return { ...DEFAULT_SETTINGS };
+  }
+}
+
+function saveSettings(settings) {
+  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+  fs.writeFileSync(SETTINGS_PATH, JSON.stringify(settings, null, 2), "utf8");
 }
 
 function loadRows() {
@@ -117,10 +134,18 @@ ipcMain.handle("save-rows", (_event, rows) => {
   return true;
 });
 ipcMain.handle("csv-path", () => CSV_PATH);
+ipcMain.handle("load-settings", () => loadSettings());
+ipcMain.handle("save-settings", (_event, settings) => {
+  saveSettings(settings);
+  return true;
+});
 
 app.whenReady().then(() => {
   createWindow();
-  setupAutoUpdate(() => mainWindow);
+  setupAutoUpdate(
+    () => mainWindow,
+    () => mainWindow && mainWindow.webContents.send("open-settings")
+  );
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });

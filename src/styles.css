@@ -14,6 +14,8 @@
   --ahead: #1a7a4c;
   --ahead-bg: #e6f5ec;
   --overlay-backdrop: rgba(0, 0, 0, 0.4);
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-scale: 1;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -35,13 +37,66 @@
   }
 }
 
+/* Manual theme override (Settings > Theme). Higher specificity than the
+   bare :root inside the media query above, so it wins whenever set;
+   "system" leaves data-theme unset and falls through to the query. */
+:root[data-theme="light"] {
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --border: #d8d8dc;
+  --header-bg: #f4f4f6;
+  --accent: #3a5ba0;
+  --row-hover: #f7f8fa;
+  --danger: #b3261e;
+  --danger-bg: #fdecea;
+  --warn: #8a5a00;
+  --warn-bg: #fff6e0;
+  --muted: #7a7a80;
+  --ahead: #1a7a4c;
+  --ahead-bg: #e6f5ec;
+  --overlay-backdrop: rgba(0, 0, 0, 0.4);
+}
+
+:root[data-theme="dark"] {
+  --bg: #1e1f22;
+  --fg: #e8e8ea;
+  --border: #3a3b3e;
+  --header-bg: #2a2b2e;
+  --accent: #7fa2e0;
+  --row-hover: #26272a;
+  --danger: #ff6b63;
+  --danger-bg: #3a201e;
+  --warn: #e0b040;
+  --warn-bg: #3a2f10;
+  --muted: #9a9a9e;
+  --ahead: #5fd399;
+  --ahead-bg: #163326;
+  --overlay-backdrop: rgba(0, 0, 0, 0.6);
+}
+
+:root[data-font-family="serif"] {
+  --font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+:root[data-font-family="mono"] {
+  --font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+
+:root[data-font-size="small"] {
+  --font-scale: 0.875;
+}
+
+:root[data-font-size="large"] {
+  --font-scale: 1.25;
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-family);
   background: var(--bg);
   color: var(--fg);
   display: flex;
@@ -58,7 +113,7 @@ header {
 }
 
 header h1 {
-  font-size: 18px;
+  font-size: calc(18px * var(--font-scale));
   margin: 0;
 }
 
@@ -69,14 +124,15 @@ header h1 {
 }
 
 .save-status {
-  font-size: 12px;
+  font-size: calc(12px * var(--font-scale));
   color: var(--muted);
   min-width: 60px;
   text-align: right;
 }
 
 button {
-  font-size: 13px;
+  font-family: var(--font-family);
+  font-size: calc(13px * var(--font-scale));
   padding: 6px 12px;
   border-radius: 6px;
   border: 1px solid var(--accent);
@@ -101,6 +157,14 @@ button.icon-btn:hover {
   color: var(--danger);
 }
 
+button.header-icon-btn {
+  font-size: 18px;
+}
+
+button.header-icon-btn:hover {
+  color: var(--accent);
+}
+
 button.secondary-btn {
   background: transparent;
   color: var(--fg);
@@ -117,7 +181,7 @@ button.text-btn {
   color: var(--accent);
   border: none;
   padding: 2px 6px;
-  font-size: 12px;
+  font-size: calc(12px * var(--font-scale));
 }
 
 button.text-btn:hover {
@@ -142,7 +206,7 @@ thead th {
   top: 0;
   background: var(--header-bg);
   text-align: left;
-  font-size: 12px;
+  font-size: calc(12px * var(--font-scale));
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--muted);
@@ -165,7 +229,7 @@ td input {
   border: 1px solid transparent;
   background: transparent;
   color: var(--fg);
-  font-size: 14px;
+  font-size: calc(14px * var(--font-scale));
   padding: 8px;
   border-radius: 4px;
   font-family: inherit;
@@ -201,7 +265,7 @@ td input:focus {
 }
 
 .progress-note {
-  font-size: 11px;
+  font-size: calc(11px * var(--font-scale));
   color: var(--muted);
   padding: 0 8px;
 }
@@ -214,7 +278,7 @@ td input:focus {
 
 .computed {
   padding: 8px;
-  font-size: 14px;
+  font-size: calc(14px * var(--font-scale));
   color: var(--muted);
 }
 
@@ -301,7 +365,7 @@ footer {
 }
 
 .completed-row .completed-meta {
-  font-size: 11px;
+  font-size: calc(11px * var(--font-scale));
 }
 
 .completed-row .completed-actions {
@@ -350,7 +414,7 @@ footer {
 }
 
 .field-label {
-  font-size: 11px;
+  font-size: calc(11px * var(--font-scale));
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--muted);
@@ -359,7 +423,7 @@ footer {
 
 .popover select,
 .popover input {
-  font-size: 14px;
+  font-size: calc(14px * var(--font-scale));
   padding: 8px;
   border-radius: 6px;
   border: 1px solid var(--border);
@@ -369,7 +433,7 @@ footer {
 }
 
 .assignment-info {
-  font-size: 12px;
+  font-size: calc(12px * var(--font-scale));
   color: var(--muted);
   background: var(--header-bg);
   border-radius: 6px;
@@ -383,8 +447,47 @@ footer {
 }
 
 .log-confirmation {
-  font-size: 12px;
+  font-size: calc(12px * var(--font-scale));
   color: var(--ahead);
   min-height: 16px;
   margin-top: 8px;
+}
+
+/* Download progress toast */
+
+.update-toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 260px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  z-index: 200;
+}
+
+.update-toast.hidden {
+  display: none;
+}
+
+#update-toast-message {
+  font-size: calc(12px * var(--font-scale));
+  color: var(--fg);
+  margin-bottom: 8px;
+}
+
+.update-toast-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--header-bg);
+  overflow: hidden;
+}
+
+.update-toast-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: width 0.2s ease;
 }

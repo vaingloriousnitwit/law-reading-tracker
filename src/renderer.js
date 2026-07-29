@@ -398,6 +398,78 @@ document.getElementById("log-submit-btn").addEventListener("click", () => {
   logPagesInput.focus();
 });
 
+// --- Settings ---
+
+const settingsOverlay = document.getElementById("settings-overlay");
+const settingsThemeSelect = document.getElementById("settings-theme");
+const settingsFontFamilySelect = document.getElementById("settings-font-family");
+const settingsFontSizeSelect = document.getElementById("settings-font-size");
+
+function applySettings(settings) {
+  const root = document.documentElement;
+  if (settings.theme === "system") root.removeAttribute("data-theme");
+  else root.setAttribute("data-theme", settings.theme);
+  root.setAttribute("data-font-family", settings.fontFamily);
+  root.setAttribute("data-font-size", settings.fontSize);
+}
+
+async function saveAndApplySettings(settings) {
+  applySettings(settings);
+  await window.api.saveSettings(settings);
+}
+
+function openSettingsOverlay() {
+  settingsOverlay.classList.remove("hidden");
+}
+
+document.getElementById("settings-btn").addEventListener("click", openSettingsOverlay);
+document.getElementById("settings-close-btn").addEventListener("click", () => {
+  settingsOverlay.classList.add("hidden");
+});
+settingsOverlay.addEventListener("click", (e) => {
+  if (e.target === settingsOverlay) settingsOverlay.classList.add("hidden");
+});
+
+window.api.onOpenSettings(openSettingsOverlay);
+
+[settingsThemeSelect, settingsFontFamilySelect, settingsFontSizeSelect].forEach((select) => {
+  select.addEventListener("change", () => {
+    saveAndApplySettings({
+      theme: settingsThemeSelect.value,
+      fontFamily: settingsFontFamilySelect.value,
+      fontSize: settingsFontSizeSelect.value,
+    });
+  });
+});
+
+// --- Update download progress toast ---
+
+const updateToast = document.getElementById("update-toast");
+const updateToastMessage = document.getElementById("update-toast-message");
+const updateToastFill = document.getElementById("update-toast-fill");
+
+function formatBytes(bytes) {
+  if (!Number.isFinite(bytes)) return "";
+  const mb = bytes / (1024 * 1024);
+  return `${mb.toFixed(1)} MB`;
+}
+
+window.api.onUpdaterEvent((payload) => {
+  if (payload.type === "download-started") {
+    updateToastMessage.textContent = `Downloading update v${payload.version}…`;
+    updateToastFill.style.width = "0%";
+    updateToast.classList.remove("hidden");
+  } else if (payload.type === "download-progress") {
+    const pct = Math.round(payload.percent || 0);
+    updateToastMessage.textContent = `Downloading update… ${pct}% (${formatBytes(payload.transferred)} / ${formatBytes(payload.total)})`;
+    updateToastFill.style.width = `${pct}%`;
+  } else if (payload.type === "download-finished") {
+    updateToast.classList.add("hidden");
+  } else if (payload.type === "download-error") {
+    updateToast.classList.add("hidden");
+  }
+});
+
 async function init() {
   rows = await window.api.loadRows();
   if (rows.length === 0) {
@@ -416,6 +488,12 @@ async function init() {
   }
   render();
   csvPathLabel.textContent = await window.api.csvPath();
+
+  const settings = await window.api.loadSettings();
+  applySettings(settings);
+  settingsThemeSelect.value = settings.theme;
+  settingsFontFamilySelect.value = settings.fontFamily;
+  settingsFontSizeSelect.value = settings.fontSize;
 }
 
 init();

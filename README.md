@@ -21,8 +21,12 @@ recalculates as you log pages read or as due dates approach.
 - **Plain CSV storage**: all data lives in a human-readable CSV file you can
   open directly in Excel, Numbers, or Google Sheets. The app just reads and
   writes that file — there's no hidden database.
-- **Check for Updates**: under the app menu, checks GitHub Releases for a
-  newer version and offers to download and install it in place.
+- **Check for Updates**: under the app menu (or ⌘,-adjacent "Settings…"),
+  checks GitHub Releases for a newer version, shows live download progress,
+  and offers to install it in place.
+- **Settings**: theme (System/Light/Dark), font family (Sans/Serif/Mono), and
+  text size (Small/Medium/Large), persisted to `settings.json` alongside the
+  CSV.
 
 ## Getting started (development)
 

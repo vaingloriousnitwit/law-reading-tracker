@@ -6,6 +6,8 @@ contextBridge.exposeInMainWorld("api", {
   loadRows: () => ipcRenderer.invoke("load-rows"),
   saveRows: (rows) => ipcRenderer.invoke("save-rows", rows),
   csvPath: () => ipcRenderer.invoke("csv-path"),
+  loadSettings: () => ipcRenderer.invoke("load-settings"),
+  saveSettings: (settings) => ipcRenderer.invoke("save-settings", settings),
   deriveRow,
   genId,
   todayISO: () => {
@@ -14,5 +16,11 @@ contextBridge.exposeInMainWorld("api", {
     const m = String(d.getMonth() + 1).padStart(2, "0");
     const day = String(d.getDate()).padStart(2, "0");
     return `${y}-${m}-${day}`;
+  },
+  onUpdaterEvent: (callback) => {
+    ipcRenderer.on("updater-event", (_event, payload) => callback(payload));
+  },
+  onOpenSettings: (callback) => {
+    ipcRenderer.on("open-settings", () => callback());
   },
 });

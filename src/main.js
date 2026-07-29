@@ -4,6 +4,7 @@ const path = require("path");
 const { parseCSV, stringifyCSV } = require("./csv");
 const { deriveRow } = require("./calc");
 const { genId } = require("./id");
+const { setupAutoUpdate } = require("./updater");
 
 // In dev, keep the CSV inside the repo (handy to inspect/commit-ignore).
 // In a packaged app, the app bundle is read-only, so use a user-writable,
@@ -93,8 +94,10 @@ function saveRows(rows) {
   fs.writeFileSync(CSV_PATH, stringifyCSV(out), "utf8");
 }
 
+let mainWindow = null;
+
 function createWindow() {
-  const win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1100,
     height: 720,
     title: "Law Reading Tracker",
@@ -105,7 +108,7 @@ function createWindow() {
       sandbox: false,
     },
   });
-  win.loadFile(path.join(__dirname, "index.html"));
+  mainWindow.loadFile(path.join(__dirname, "index.html"));
 }
 
 ipcMain.handle("load-rows", () => loadRows());
@@ -117,6 +120,7 @@ ipcMain.handle("csv-path", () => CSV_PATH);
 
 app.whenReady().then(() => {
   createWindow();
+  setupAutoUpdate(() => mainWindow);
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });

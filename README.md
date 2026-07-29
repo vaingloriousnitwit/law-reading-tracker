@@ -21,6 +21,8 @@ recalculates as you log pages read or as due dates approach.
 - **Plain CSV storage**: all data lives in a human-readable CSV file you can
   open directly in Excel, Numbers, or Google Sheets. The app just reads and
   writes that file — there's no hidden database.
+- **Check for Updates**: under the app menu, checks GitHub Releases for a
+  newer version and offers to download and install it in place.
 
 ## Getting started (development)
 
@@ -59,6 +61,25 @@ The icon is generated from a single SVG source:
 npm run icons                      # rasterizes build/icon.svg -> build/icon.iconset + build/icon.png
 iconutil -c icns build/icon.iconset -o build/icon.icns   # macOS only
 ```
+
+## Releasing an update
+
+The packaged app checks GitHub Releases for updates (see `build.publish` in
+`package.json`). To ship one:
+
+```bash
+# 1. bump "version" in package.json (semver)
+# 2. build, sign, and publish a GitHub Release with the new version's dmg/zip
+GH_TOKEN=$(gh auth token) npm run release
+```
+
+This is currently signed with a local Apple Development identity rather than
+a paid Apple Developer ID, so there's no notarization — installs and updates
+work, but macOS Gatekeeper will still show its "unidentified developer"
+prompt on a first-time install (right-click → Open, or allow it in System
+Settings → Privacy & Security). Auto-updates on an already-installed copy are
+unaffected by this. Upgrading to a real Developer ID later doesn't require
+any code changes here — just add signing/notarization credentials.
 
 ## Project structure
 

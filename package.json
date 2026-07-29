@@ -1,0 +1,56 @@
+{
+  "name": "law-reading-tracker",
+  "version": "1.0.0",
+  "description": "Desktop app for tracking law school reading assignments, backed by a plain CSV file.",
+  "main": "src/main.js",
+  "author": "trillkump",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trillkump/law-reading-tracker.git"
+  },
+  "scripts": {
+    "start": "electron .",
+    "icons": "node build/make-icons.js",
+    "dist": "electron-builder",
+    "dist:mac": "electron-builder --mac"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8",
+    "sharp": "^0.35.3"
+  },
+  "build": {
+    "appId": "com.trillkump.lawreadingtracker",
+    "productName": "Law Reading Tracker",
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "mac": {
+      "icon": "build/icon.icns",
+      "category": "public.app-category.productivity",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "icon": "build/icon.png",
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "icon": "build/icon.png",
+      "target": [
+        "AppImage"
+      ],
+      "category": "Office"
+    }
+  }
+}

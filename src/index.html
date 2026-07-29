@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Law Reading Tracker</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Law Reading Tracker</h1>
+      <div class="header-actions">
+        <span id="save-status" class="save-status"></span>
+        <button id="show-completed-btn" class="secondary-btn">Show Completed (0)</button>
+        <button id="log-pages-btn" class="secondary-btn">Log Pages</button>
+        <button id="add-row-btn">+ Add Class</button>
+      </div>
+    </header>
+
+    <main>
+      <table id="reading-table">
+        <thead>
+          <tr>
+            <th class="col-done"></th>
+            <th class="col-class">Class</th>
+            <th class="col-title">Next Reading / Notes</th>
+            <th class="col-pages">Pages</th>
+            <th class="col-due">Due Date</th>
+            <th class="col-days">Days Until Due</th>
+            <th class="col-perday">Pages / Day</th>
+            <th class="col-actions"></th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+
+      <section id="completed-section" class="completed-section hidden">
+        <h2>Completed</h2>
+        <table id="completed-table">
+          <tbody id="completed-body"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <footer>
+      <span id="csv-path-label" class="csv-path"></span>
+    </footer>
+
+    <div id="log-overlay" class="overlay hidden">
+      <div class="popover">
+        <div class="popover-header">
+          <h2>Log Pages Read</h2>
+          <button id="log-close-btn" class="icon-btn" title="Close">✕</button>
+        </div>
+
+        <label class="field-label" for="log-class-select">Class</label>
+        <select id="log-class-select"></select>
+
+        <div id="log-assignment-info" class="assignment-info"></div>
+
+        <label class="field-label" for="log-pages-input">Pages read</label>
+        <input id="log-pages-input" type="number" min="0" placeholder="e.g. 20" />
+
+        <button id="log-submit-btn">Log</button>
+        <div id="log-confirmation" class="log-confirmation"></div>
+      </div>
+    </div>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+node_modules/
+release/
+build/icon.iconset/
+
+# Personal reading data — the app creates this automatically on first run.
+data/readings.csv
+
+.DS_Store
+npm-debug.log*

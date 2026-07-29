@@ -138,7 +138,9 @@ function renderActiveRows() {
     );
     tr.appendChild(titleTd);
 
-    const pagesTd = makeCell("col-pages pages-cell");
+    const pagesTd = makeCell("col-pages");
+    const pagesWrap = document.createElement("div");
+    pagesWrap.className = "pages-cell";
     const pagesInput = document.createElement("input");
     pagesInput.type = "number";
     pagesInput.min = "0";
@@ -149,13 +151,14 @@ function renderActiveRows() {
       updateComputedCells(row.id);
       scheduleSave();
     });
-    pagesTd.appendChild(pagesInput);
+    pagesWrap.appendChild(pagesInput);
     const note = formatProgressNote(derived);
     const noteDiv = document.createElement("div");
     noteDiv.className = "progress-note" + (note ? ` ${note.cls}` : "");
     noteDiv.dataset.role = "progress-note";
     noteDiv.textContent = note ? note.text : "";
-    pagesTd.appendChild(noteDiv);
+    pagesWrap.appendChild(noteDiv);
+    pagesTd.appendChild(pagesWrap);
     tr.appendChild(pagesTd);
 
     const dueTd = makeCell("col-due");
